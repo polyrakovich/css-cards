@@ -1,0 +1,152 @@
+/*переменные хочу ввести уже в сасс*/
+
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-family: "helvetica neue", helvetica, arial, sans-serif;
+}
+
+body {
+    padding: 5rem;
+    background-color: #444444;
+    /*где-то увидела что нужно добавить но не поняла зачем*/
+    min-height: 100vh;
+}
+.cards {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-flow: row wrap;
+}
+/*вот в этой части каким то образом получилось добавить z-index к дочерним элементам флекс-контейнера,без позиционирования*/
+.tooltip-cnt {
+    display: flex;
+    flex-flow: column wrap;
+}
+
+.tooltip-target {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: center;
+    z-index: 2; /*без него всплывающее окно было сверху*/
+    padding: 1rem;
+    margin: 0 auto;
+    height: 35vh; /*высоту решила задать потому что без нее было не оч*/
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #444444;
+    border-radius: 50%;
+    aspect-ratio: 1/1; /*не уверена что это обязательно,я хотела сохранить соотношение сторон изначальное,чтобы не плющило круг*/
+    background-color: #333333;
+    box-shadow: 0 10px 15px 10px #222222;
+    cursor: pointer;
+    transform: translateY(25%);
+    transition: opacity 0.2s, visibility 0.4s, transform 0.4s;
+
+    &:hover {
+        transform: translateY(0);
+        box-shadow: -5px 5px 30px  rgba(232, 170, 255, 0.5),
+        5px -5px 30px  rgba(127, 151, 255, 0.5),
+        inset 5px -5px 25px rgba(232, 170, 255, 0.5),
+        inset 5px -5px 25px rgba(127, 151, 255, 0.5);
+        border: none;
+        background: rgb(127,28,163);
+        background: linear-gradient(125deg, rgba(127,28,163,1) 0%, rgba(45,0,225,1) 100%);
+        color: white;
+        transition: transform 0.4s, box-shadow 0.8s; /*замедленная подсветка,как в задании попросили*/
+
+        path {
+            fill: white;
+        }
+    }
+
+    svg {
+        width: 45px;
+        height: 45px;
+    }
+}
+
+/*вот этот переход я увидела на Доке, пробовала его делать другими способами,ничего не получилось,до конца не понимаю как работает этот +,это вообще норм так делать?*/
+.tooltip-target:hover + .tooltip {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+.tooltip {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: center;
+    z-index: 1; /*вот тоже индекс который сработал*/
+    padding: 1.5rem;
+    margin: 1rem;
+    height: 35vh; /*высоту решила задать потому что без нее было не оч*/
+    font-size: 1rem;
+    line-height: 1.5;
+    text-align: center;
+    overflow: hidden;
+    word-break: break-all;
+    border-radius: 50%;
+    aspect-ratio: 1/1;
+    background-color: white;
+    box-shadow: 0 10px 15px 10px #222222,
+                inset 0 10px 20px rgba(232, 170, 255, 0.5);
+
+    transition: opacity 0.4s, visibility 0.4s, transform 0.4s;
+     /*Прячем элемент */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-82%); /*вот эта штука какая то нестабильная,при разных разрешениях экрана,если сделать всплывающий круг видимым,он не полностью прячется за основными серыми кругами,но я сделала изначально его невидимым,поэтому вроде смотрится нормально))*/
+
+    a {
+        margin: 0.5rem auto;
+        text-decoration: none;
+        color: #222222;
+        border: #222222 1px dotted;
+    }
+}
+/*а теперь адаптив, который получился уебанским,в тг распишу почему*/
+@media screen and (max-width: 1500px) {
+    .tooltip-target {
+        padding: 0.5rem;
+        font-size: 1rem;
+        svg {
+            width: 30px;
+            height: 30px;
+        }
+    }
+
+    .tooltip {
+        padding: 0.25rem;
+        font-size: 0.75rem;
+        a {
+            margin: 0.25rem 0 0 0;
+        }
+    }
+
+}
+
+@media screen and (max-width: 750px) {
+    .tooltip-target {
+        padding: 0.5rem;
+        font-size: 0.75rem;
+        svg {
+            width: 20px;
+            height: 20px;
+        }
+    }
+
+    .tooltip {
+        padding: 0.5rem;
+        font-size: 0.5rem;
+    }
+
+}
